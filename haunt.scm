@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Site definition ;;
 ;;;;;;;;;;;;;;;;;;;;;
-(site #:title     "Gaia Vivá"
+(site #:title     "Gaia Vivá "
       #:domain    "https://gaiaviva.neocities.org"
       #:make-slug post-slug-v2
       #:readers   (list commonmark-reader)
