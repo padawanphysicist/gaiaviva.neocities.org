@@ -1,67 +1,54 @@
-#+title: Haunt Example: Landing Page
+#+title: Gaia Vivá: Linktree Landing Page
 
-A minimal example of a single-page landing site built with [[https://dthompson.us/projects/haunt.html][Haunt]], the
-[[https://www.gnu.org/software/guile/][Guile Scheme]] static site generator.
-
-[[file:assets/img/screenshot.png]]
+A custom linktree/landing page built with [[https://dthompson.us/projects/haunt.html][Haunt]], the
+[[https://www.gnu.org/software/guile/][Guile Scheme]] static site generator. This is the homepage for
+Gaia Vivá.
 
 * Project layout
 
 #+begin_example
-haunt-landing-page/
-├── haunt.scm           <= site configuration & template
-├── pages/
-│   └── index.md        <= landing page content (Markdown)
+homepage/
+├── haunt.scm           <= Site configuration & metadata entries
+├── Makefile            <= Build & development commands
+├── builder/
+│   └── linktree.scm    <= Custom Scheme builder & SXML templates
 └── assets/
-    └── css/
-        └── style.css   <= stylesheet (copied verbatim)
+    ├── css/
+    │   ├── default.css <= Core styling and responsive layouts
+    │   └── fonts.css   <= Custom font configurations
+    └── img/            <= Avatars, background images, and social icons
 #+end_example
 
 * How it works
 
-- =pages/index.md= is a *flat page*: a Markdown file with a metadata
-   header understood by Haunt:
-
-#+begin_example
-title: My Page Title
----
-
-# Markdown content starts here
-#+end_example
-   
-- =haunt.scm= wires everything together:
-   - =(commonmark-reader)= parses the =.md= files
-   - =(flat-pages "pages" #:template landing-layout)= converts each
-     file in =pages/= to an HTML page at the same path in =site/=
-   - =(static-directory "assets")= copies CSS/images unchanged
-   - =landing-layout= is a plain Scheme procedure that returns SXML;
-     its signature =(site title body)= matches what =flat-pages= expects
+- =haunt.scm= defines the site metadata, including the links/cards using a helper procedure:
+- =builder/linktree.scm= provides:
+  - =(card #:key type link title asset description)=: A procedure returning SXML for individual links/cards, supporting both image-based and icon-based cards.
+  - =(linktree-builder metadata)=: A custom Haunt builder that reads the metadata and compiles it via SXML into the output =index.html=.
 
 * Requirements
 
 - [[https://www.gnu.org/software/guile/][GNU/Guile]] (>= 3.0)
-- [[https://dthompson.us/projects/haunt.html][Haunt]] (>= 0.3; can install with =guix install haunt= or build from source)
+- [[https://dthompson.us/projects/haunt.html][Haunt]] (>= 0.3)
 
 * Usage
 
+You can use the provided =Makefile= targets:
+
 #+begin_src bash
-# Build the site
-haunt build
+# Build the site into ./site/
+make
 
-# Serve with live reload at http://localhost:8080
-haunt serve --watch
+# Serve the site with live reload at http://localhost:8080
+make watch
+
+# Run the automatic building helper script
+make autobuild
 #+end_src
-
-The generated =site/= directory contains plain HTML/CSS and can be
-deployed to any static host (Sourcehut Pages, Netlify, Codeberg Pages,
-a VPS running nginx, etc.).
 
 * Customisation
 
-- *Content*: edit =pages/index.md=: add sections, change copy, add new
-  =.md= files for additional pages
-- *Layout*: edit the =landing-layout= procedure in =haunt.scm=;
-  it returns SXML so you have the full power of Scheme for templating
-- *Styles*: edit =assets/css/style.css=
-- *Multiple pages*: drop more =.md= files into =pages/=; each gets its own
-  URL automatically
+- *Metadata & Links*: Edit =haunt.scm= to update the site title, description, profile avatar, footer, or add/remove links from the =entries= list.
+- *HTML Structure*: Edit =builder/linktree.scm= to modify the SXML templates, card layouts, or SEO meta tags.
+- *Styling*: Edit =assets/css/default.css= to adjust fonts, colors, responsive media queries, and animations.
+
