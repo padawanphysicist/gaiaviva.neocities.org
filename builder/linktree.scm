@@ -3,6 +3,8 @@
   #:use-module (haunt html)
   #:use-module (haunt post)
   #:use-module (haunt site)
+  #:use-module (ice-9 format)
+  #:use-module (srfi srfi-1)
   #:export (linktree-builder
             card))
 
@@ -25,48 +27,55 @@
                   (p ,(if description description "")))))))
 
 (define (template-default url title description avatar entries footer)
-  `(html
-    (@ (lang "pt-BR"))
-    (head
-     (meta (@ (charset "utf-8")))
-     (meta (@ (name "viewport") (content "width=device-width, initial-scale=1")))
-     (link (@ (rel "apple-touch-icon") (sizes "180x180") (href "assets/img/apple-touch-icon.png")))
-     (link (@ (rel "icon") (type "image/png") (sizes "32x32") (href "assets/img/favicon-32x32.png")))
-     (link (@ (rel "icon") (type "image/png") (sizes "16x16") (href "assets/img/favicon-16x16.png")))
+  ;; Função auxiliar para extrair texto de S-expressions HTML (recursiva)
+  (letrec ((extract-strings
+            (lambda (x)
+              (cond ((string? x) (list x))
+                    ((list? x) (append-map extract-strings x))
+                    (else '())))))
+    (let ((str-description  (string-join (extract-strings description) "")))
+      `(html
+        (@ (lang "pt-BR"))
+        (head
+         (meta (@ (charset "utf-8")))
+         (meta (@ (name "viewport") (content "width=device-width, initial-scale=1")))
+         (link (@ (rel "apple-touch-icon") (sizes "180x180") (href "assets/img/apple-touch-icon.png")))
+         (link (@ (rel "icon") (type "image/png") (sizes "32x32") (href "assets/img/favicon-32x32.png")))
+         (link (@ (rel "icon") (type "image/png") (sizes "16x16") (href "assets/img/favicon-16x16.png")))
 
-     ;; Open Graph Meta Tags
-     (meta (@ (property "og:url") (content ,url)))
-     (meta (@ (property "og:title") (content ,title)))
-     (meta (@ (property "og:description") (content ,description)))
-     (meta (@ (property "og:image") (content "assets/img/preview.jpg")))
-     (meta (@ (property "og:type") (content "website")))
+         ;; Open Graph Meta Tags
+         (meta (@ (property "og:url") (content ,url)))
+         (meta (@ (property "og:title") (content ,title)))
+         (meta (@ (property "og:description") (content ,str-description)))
+         (meta (@ (property "og:image") (content "assets/img/preview.jpg")))
+         (meta (@ (property "og:type") (content "website")))
 
-     ;; Twitter Card Meta Tags
-     (meta (@ (name "twitter:card") (content "assets/img/preview.png")))
-     (meta (@ (name "twitter:title") (content ,title)))
-     (meta (@ (name "twitter:description") (content ,description)))
-     (meta (@ (name "twitter:image") (content "assets/img/preview.png")))
+         ;; Twitter Card Meta Tags
+         (meta (@ (name "twitter:card") (content "assets/img/preview.png")))
+         (meta (@ (name "twitter:title") (content ,title)))
+         (meta (@ (name "twitter:description") (content ,str-description)))
+         (meta (@ (name "twitter:image") (content "assets/img/preview.png")))
 
-     (link (@ (rel "manifest") (href "/site.webmanifest"))) 
-     (link (@ (rel "stylesheet") (href "assets/css/default.css")))
-     (title ,title))
-    (body
-     (div (@ (class "container"))
-          (div (@ (class "header"))
-               (div (@ (class "avatar"))
-                    (img (@ (src ,avatar)
-                            (alt "Profile Avatar"))))
-               (h1 (@ (class "title")) ,title)
-               (p (@ (class "description")) ,description)
-               (div (@ (class "divider"))))
-          (nav (@ (class "navigation"))
-               (ul
-                ,@(map
-                   (lambda (entry)
-                     ;; Format each link
-                     `(li ,entry))
-                   entries)))
-          (footer (@ (class "profile-footer")) ,footer)))))
+         (link (@ (rel "manifest") (href "/site.webmanifest"))) 
+         (link (@ (rel "stylesheet") (href "assets/css/default.css")))
+         (title ,title))
+        (body
+         (div (@ (class "container"))
+              (div (@ (class "header"))
+                   (div (@ (class "avatar"))
+                        (img (@ (src ,avatar)
+                                (alt "Profile Avatar"))))
+                   (h1 (@ (class "title")) ,title)
+                   (div (@ (class "description")) ,description)
+                   (div (@ (class "divider"))))
+              (nav (@ (class "navigation"))
+                   (ul
+                    ,@(map
+                       (lambda (entry)
+                         ;; Format each link
+                         `(li ,entry))
+                       entries)))
+              (footer (@ (class "profile-footer")) ,footer)))))))
 
 (define* (linktree-builder metadata
                            #:optional

@@ -200,12 +200,6 @@ p {
     color: var(--color-text);
 }
 
-.description {
-    font-size: 1.3rem;
-    font-style: italic;
-    color: var(--color-secondary);
-}
-
 /*********************************************************************
  * Cabeçalho 
  ********************************************************************/
@@ -219,8 +213,11 @@ p {
     margin-bottom: 0;
 }
 
-.description {
+.description p {
     margin: 0 0;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--color-danger);
 }
 
 .divider {
