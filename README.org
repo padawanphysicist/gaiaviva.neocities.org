@@ -1,0 +1,54 @@
+#+title: Gaia Vivá: Linktree Landing Page
+
+A custom linktree/landing page built with [[https://dthompson.us/projects/haunt.html][Haunt]], the
+[[https://www.gnu.org/software/guile/][Guile Scheme]] static site generator. This is the homepage for
+Gaia Vivá.
+
+* Project layout
+
+#+begin_example
+homepage/
+├── haunt.scm           <= Site configuration & metadata entries
+├── Makefile            <= Build & development commands
+├── builder/
+│   └── linktree.scm    <= Custom Scheme builder & SXML templates
+└── assets/
+    ├── css/
+    │   ├── default.css <= Core styling and responsive layouts
+    │   └── fonts.css   <= Custom font configurations
+    └── img/            <= Avatars, background images, and social icons
+#+end_example
+
+* How it works
+
+- =haunt.scm= defines the site metadata, including the links/cards using a helper procedure:
+- =builder/linktree.scm= provides:
+  - =(card #:key type link title asset description)=: A procedure returning SXML for individual links/cards, supporting both image-based and icon-based cards.
+  - =(linktree-builder metadata)=: A custom Haunt builder that reads the metadata and compiles it via SXML into the output =index.html=.
+
+* Requirements
+
+- [[https://www.gnu.org/software/guile/][GNU/Guile]] (>= 3.0)
+- [[https://dthompson.us/projects/haunt.html][Haunt]] (>= 0.3)
+
+* Usage
+
+You can use the provided =Makefile= targets:
+
+#+begin_src bash
+# Build the site into ./site/
+make
+
+# Serve the site with live reload at http://localhost:8080
+make watch
+
+# Run the automatic building helper script
+make autobuild
+#+end_src
+
+* Customisation
+
+- *Metadata & Links*: Edit =haunt.scm= to update the site title, description, profile avatar, footer, or add/remove links from the =entries= list.
+- *HTML Structure*: Edit =builder/linktree.scm= to modify the SXML templates, card layouts, or SEO meta tags.
+- *Styling*: Edit =assets/css/default.css= to adjust fonts, colors, responsive media queries, and animations.
+
