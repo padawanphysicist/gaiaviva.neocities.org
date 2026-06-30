@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Arquivos a serem observados
-FILES=(haunt.scm template/linktree.scm pages/index.md)
+FILES=(haunt.scm builder/linktree.scm assets/css/style.css)
 
 while inotifywait -e modify,attrib "${FILES[@]}"; do
     make linktree
