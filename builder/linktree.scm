@@ -24,7 +24,7 @@
                   (h3 ,title)
                   (p ,(if description description "")))))))
 
-(define (template-default title description avatar entries footer)
+(define (template-default url title description avatar entries footer)
   `(html
     (@ (lang "pt-BR"))
     (head
@@ -33,6 +33,20 @@
      (link (@ (rel "apple-touch-icon") (sizes "180x180") (href "assets/img/apple-touch-icon.png")))
      (link (@ (rel "icon") (type "image/png") (sizes "32x32") (href "assets/img/favicon-32x32.png")))
      (link (@ (rel "icon") (type "image/png") (sizes "16x16") (href "assets/img/favicon-16x16.png")))
+
+     ;; Open Graph Meta Tags
+     (meta (@ (property "og:url") (content ,url)))
+     (meta (@ (property "og:title") (content ,title)))
+     (meta (@ (property "og:description") (content ,description)))
+     (meta (@ (property "og:image") (content "assets/img/preview.jpg")))
+     (meta (@ (property "og:type") (content "website")))
+
+     ;; Twitter Card Meta Tags
+     (meta (@ (name "twitter:card") (content "assets/img/preview.png")))
+     (meta (@ (name "twitter:title") (content ,title)))
+     (meta (@ (name "twitter:description") (content ,description)))
+     (meta (@ (name "twitter:image") (content "assets/img/preview.png")))
+
      (link (@ (rel "manifest") (href "/site.webmanifest"))) 
      (link (@ (rel "stylesheet") (href "assets/css/default.css")))
      (title ,title))
@@ -62,10 +76,11 @@
     (let* ((title (or (assoc-ref metadata 'title) "John Doe"))
            (description (or (assoc-ref metadata 'description) "Empregado do mês"))
            (avatar (or (assoc-ref metadata 'avatar) #f))
+           (url (or (assoc-ref metadata 'url) "www.example.com"))
            (entries (or (assoc-ref metadata 'entries) '()))
            (footer (or (assoc-ref metadata 'footer) "Feito com Haunt & Guile Scheme")))
       (list
         (serialized-artifact
           output
-          (template title description avatar entries footer)
+          (template url title description avatar entries footer)
           sxml->html)))))

@@ -13,6 +13,7 @@
 
 (define *metadata*
   `((title . "Gaia Vivá")
+    (url . "https://gaiaviva.neocities.org/")
     (description . "🌿 Culinária Consciente, prática e saborosa. Retiros, oficinas e encontros de saúde")
     (avatar . "assets/img/avatar.png")
     (footer .
