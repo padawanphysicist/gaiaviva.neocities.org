@@ -1,0 +1,65 @@
+/* Configuração Global ---------------------------------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+/* 
+ * NOTA DE CONFIGURAÇÃO (Tailwind v4 + Haunt/Guile Scheme):
+ * O Tailwind v4 utiliza uma varredura agressiva (tree-shaking) e ignora variáveis do @theme 
+ * se as classes correspondentes não forem encontradas nos arquivos do projeto. Como o Haunt 
+ * utiliza arquivos `.scm` (Scheme) e `.md` (Markdown) — que não são rastreados por padrão —, 
+ * a diretiva `@source` abaixo é obrigatória para instruir o compilador do Tailwind a escanear 
+ * essas extensões e garantir que a paleta do Dr. Marco Antônio seja gerada no CSS final.
+ */
+@import "tailwindcss";
+@source "../../**/*.{scm}";
+
+@theme {
+  /* Fontes Customizadas */
+  --font-sans: Lato, sans-serif;
+  --font-serif: Playfair Display, serif;
+
+    /* ===============================================================
+       Paleta Gaia Viva — Culinária Funcional
+       Extraída dos cards institucionais @gaiaviva
+       
+       Organização:
+         1. Fundos    — tons de base para seções e páginas
+         2. Textos    — cores para tipografia sobre cada fundo
+         3. Destaques — cores para palavras-chave e elementos interativos
+       
+       Combinações validadas (fundo → texto principal):
+         --color-areia      + --text-dark
+         --color-floresta   + --text-light
+         --color-terracota  + #ffffff
+         --color-ocre       + --text-dark
+       ============================================================ */
+
+    /* --- Fundos ------------------------------------------------- */
+    --color-areia: #F0EBE0; /* bege quente, fundo principal   */
+    --color-floresta: #2D5435; /* verde escuro, seções de impacto */
+    --color-terracota: #C47A45; /* alaranjado queimado, chamadas  */
+    --color-ocre: #C8A035; /* dourado terroso, avisos/badges */
+
+    /* --- Textos ------------------------------------------------- */
+    --text-dark: #2D3B2D; /* texto principal sobre fundos claros */
+    --text-light: #F5F0E8; /* texto principal sobre fundos escuros */
+
+    /* --- Destaques ---------------------------------------------- */
+    --color-ferrugem: #C0582A; /* destaque quente */
+    --color-ambar: #E8A030; /* destaque dourado */
+    --color-sage: #4A8A5C; /* ícones, links, bordas */
+    --color-castanho: #8B4A2B; /* separadores, elementos discretos */
+  
+  
+  /**********************************/
+  /* Paleta de Cores Institucionais */
+  /**********************************/
+
+  --color-surface: var(--color-areia);
+  --color-raised: #F5F0E8;
+  --color-emphasis: #C47A45;
+  --color-primary: #2D5435;
+  --color-primary-light: #4A8A5C;
+  --color-text-dark: #2D3B2D;
+  --color-muted: #8B4A2B;
+}
